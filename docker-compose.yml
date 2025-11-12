@@ -20,11 +20,12 @@ services:
         # There is no need to change that except if Invidious companion does not run on the same docker compose file.
         - private_url: "http://companion:8282/companion"
         invidious_companion_key: $SERVICE_INVIDIOUS_COMPANION_KEY
-        # external_port:
+        external_port: 443
         domain: $SERVICE_INVIDIOUS_DOMAIN
         https_only: true
         # statistics_enabled: false
         hmac_key: $SERVICE_HMAC_KEY
+        use_pubsub_feeds: true
     healthcheck:
       test: wget -nv --tries=1 --spider http://127.0.0.1:3000/api/v1/trending || exit 1
       interval: 30s

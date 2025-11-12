@@ -18,10 +18,17 @@ services:
         invidious_companion:
         # URL used for the internal communication between invidious and invidious companion
         # There is no need to change that except if Invidious companion does not run on the same docker compose file.
-        - private_url: "http://companion:8282/companion"
+        - private_url: "https://invidious.chazona.dev/companion"
         invidious_companion_key: $SERVICE_INVIDIOUS_COMPANION_KEY
         external_port: 443
         domain: $SERVICE_INVIDIOUS_DOMAIN
+        popular_enabled: false
+        admins: [chazona]
+        feed_menu: ["Subscriptions", "Playlists"]
+        default_home: Subscriptions
+        comments: ["youtube", "reddit"]
+        quality: dash
+        quality_dash: 1440p
         https_only: true
         # statistics_enabled: false
         hmac_key: $SERVICE_HMAC_KEY
@@ -40,14 +47,13 @@ services:
   companion:
     image: quay.io/invidious/invidious-companion:latest
     environment:
-      # Use the key generated in the 2nd step
       - SERVER_SECRET_KEY=$SERVICE_INVIDIOUS_COMPANION_KEY
     restart: unless-stopped
     # Uncomment only if you have configured "public_url" for Invidious companion
     # Or if you want to use Invidious companion as an API in your program.
     # Remove "127.0.0.1:" if used from an external IP
-    #ports:
-    #  - "127.0.0.1:8282:8282"
+    ports:
+      - "127.0.0.1:8282:8282"
     logging:
       options:
         max-size: "1G"

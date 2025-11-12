@@ -34,9 +34,11 @@ services:
         hmac_key: $SERVICE_HMAC_KEY
         use_pubsub_feeds: true
     labels:
-      - traefik.enable=true
-      - "traefik.http.routers.<unique_router_name>.rule=Host(`coolify.io`) && PathPrefix(`/`)"
-      - traefik.http.routers.<unique_router_name>.entryPoints=http
+      - "traefik.enable=true"
+      - "traefik.http.routers.indivious.rule=Host(`indivious.chazona.dev`) && !(PathPrefix(`/companion`))"
+      - "traefik.http.routers.indivious.entrypoints=web-sec"
+      - "traefik.http.routers.indivious.tls.certresolver=le"
+      - "traefik.http.services.indivious.loadbalancer.server.port=3000"
     logging:
       options:
         max-size: "1G"
@@ -54,6 +56,12 @@ services:
     # Remove "127.0.0.1:" if used from an external IP
     ports:
       - "127.0.0.1:8282:8282"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.invidious-companion.rule=Host(`indivious.chazona.dev`) && (PathPrefix(`/companion`))"
+      - "traefik.http.routers.invidious-companion.entrypoints=web-sec"
+      - "traefik.http.routers.invidious-companion.tls.certresolver=le"
+      - "traefik.http.services.invidious-companion.loadbalancer.server.port=8282"
     logging:
       options:
         max-size: "1G"

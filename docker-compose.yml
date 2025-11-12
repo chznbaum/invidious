@@ -26,11 +26,6 @@ services:
         # statistics_enabled: false
         hmac_key: $SERVICE_HMAC_KEY
         use_pubsub_feeds: true
-    healthcheck:
-      test: wget -nv --tries=1 --spider http://127.0.0.1:3000/api/v1/trending || exit 1
-      interval: 30s
-      timeout: 5s
-      retries: 2
     labels:
       - traefik.enable=true
       - "traefik.http.routers.<unique_router_name>.rule=Host(`coolify.io`) && PathPrefix(`/`)"
